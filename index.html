@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skeedor Photos</title>
+<meta name="description" content="Skeedor Photos — Timeless photography capturing the warmth, depth, and beauty of life's most precious moments.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@100;200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --warm-white: #FAF7F2;
+    --brown-dark: #2C1810;
+    --brown-mid: #6B3D2E;
+    --brown-light: #A67C6D;
+    --brown-pale: #D4B8A8;
+    --gold: #C4973A;
+    --gold-light: #E8C97A;
+    --text-dark: #1A0F0A;
+    --text-mid: #5C3D2E;
+    --text-light: #8B6B5A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Josefin Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* =====================
+     CUSTOM CURSOR
+  ===================== */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--brown-dark);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid var(--brown-light);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.3s ease;
+    transform: translate(-50%, -50%);
+  }
+
+  /* =====================
+     NAVIGATION
+  ===================== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 60px;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300;
+    letter-spacing: 4px;
+    color: var(--cream);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nav-logo span { font-style: italic; color: var(--gold-light); }
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.7); text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 300;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+
+  /* Nav changes on scroll */
+  nav.scrolled {
+    background: var(--warm-white);
+    box-shadow: 0 1px 0 var(--brown-pale);
+    padding: 16px 60px;
+    transition: all 0.4s;
+  }
+  nav.scrolled .nav-logo { color: var(--brown-dark); }
+  nav.scrolled .nav-logo span { color: var(--gold); }
+  nav.scrolled .nav-links a { color: var(--text-mid); }
+  nav.scrolled .nav-links a:hover { color: var(--gold); }
+
+  /* =====================
+     HERO SECTION
+  ===================== */
+  .hero {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    background: var(--brown-dark);
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Subtle dot pattern on hero background */
+  .hero-left::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .hero-eyebrow {
+    font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--brown-light); margin-bottom: 20px; font-weight: 300;
+    position: relative;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 6vw, 86px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.05;
+    margin-bottom: 32px;
+    position: relative;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-desc {
+    font-size: 11px; letter-spacing: 2px;
+    color: var(--brown-pale); line-height: 2;
+    max-width: 320px; margin-bottom: 48px;
+    font-weight: 300; position: relative;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 16px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--cream); text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 16px 32px;
+    transition: all 0.4s;
+    position: relative; overflow: hidden;
+    width: fit-content; cursor: none;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-arrow { transition: transform 0.3s; position: relative; z-index: 1; }
+  .btn-primary:hover .btn-arrow { transform: translateX(6px); }
+
+  /* Hero right — photo grid */
+  .hero-right {
+    position: relative; overflow: hidden;
+    background: var(--cream);
+  }
+  .hero-img-grid {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 3px;
+  }
+  .hero-img-grid .img-cell {
+    overflow: hidden; position: relative;
+  }
+  /* =====================================================
+     PHOTO PLACEHOLDERS
+     REPLACE THESE: swap the background gradient below
+     with: background-image: url('your-photo.jpg');
+            background-size: cover;
+            background-position: center;
+  ====================================================== */
+  .photo-a { background: linear-gradient(135deg, #8B6B5A 0%, #5C3D2E 50%, #2C1810 100%); }
+  .photo-b { background: linear-gradient(135deg, #C4973A 0%, #A67C6D 50%, #6B3D2E 100%); }
+  .photo-c { background: linear-gradient(135deg, #D4B8A8 0%, #A67C6D 50%, #8B6B5A 100%); }
+  .photo-d { background: linear-gradient(135deg, #6B3D2E 0%, #2C1810 50%, #1A0F0A 100%); }
+
+  .img-placeholder {
+    width: 100%; height: 100%;
+    transition: transform 0.8s ease;
+    background-size: cover;
+    background-position: center;
+  }
+  .img-cell:hover .img-placeholder { transform: scale(1.05); }
+  .photo-label {
+    position: absolute; bottom: 16px; left: 16px;
+    font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); font-weight: 300;
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-text {
+    font-size: 8px; letter-spacing: 4px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); font-weight: 300;
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+
+  /* =====================
+     STATS BAR
+  ===================== */
+  .stats-bar {
+    background: var(--cream);
+    border-top: 1px solid var(--brown-pale);
+    border-bottom: 1px solid var(--brown-pale);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .stat-item {
+    padding: 32px 40px;
+    border-right: 1px solid var(--brown-pale);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px; font-weight: 300;
+    color: var(--brown-dark); line-height: 1;
+  }
+  .stat-num sup { font-size: 22px; color: var(--gold); font-style: italic; }
+  .stat-label {
+    font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--text-light); font-weight: 300;
+  }
+
+  /* =====================
+     ABOUT SECTION
+  ===================== */
+  .about {
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+  }
+  .about-img { position: relative; overflow: hidden; }
+  .about-photo {
+    width: 100%; height: 100%; min-height: 600px;
+    /* REPLACE with your photographer's photo:
+       background-image: url('about-photo.jpg');
+       background-size: cover;
+       background-position: center; */
+    background: linear-gradient(160deg, #C4973A 0%, #8B6B5A 30%, #5C3D2E 60%, #2C1810 100%);
+    position: relative;
+  }
+  .about-photo::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:  center/300px;
+     background-image: url('skido.jpeg');
+       background-size: cover;
+       background-position: center; */
+  }
+  .about-badge {
+    position: absolute; bottom: 40px; right: -20px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: var(--warm-white);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 20px 60px rgba(44,24,16,0.2);
+    z-index: 2;
+  }
+  .about-badge-year {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; color: var(--brown-dark);
+  }
+  .about-badge-text {
+    font-size: 8px; letter-spacing: 2px; color: var(--text-light);
+    text-transform: uppercase; font-family: 'Josefin Sans', sans-serif; font-weight: 300;
+  }
+  .about-content {
+    padding: 100px 80px;
+    display: flex; flex-direction: column; justify-content: center;
+    background: var(--warm-white);
+  }
+  .section-eyebrow {
+    font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px; font-weight: 300;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block; width: 40px; height: 1px;
+    background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px); font-weight: 300;
+    color: var(--brown-dark); line-height: 1.2;
+    margin-bottom: 28px;
+  }
+  .section-title em { font-style: italic; color: var(--brown-light); }
+  .about-text {
+    font-size: 11px; letter-spacing: 1.5px; line-height: 2.2;
+    color: var(--text-light); margin-bottom: 24px; font-weight: 300;
+  }
+  .signature {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-style: italic; font-weight: 300;
+    color: var(--brown-mid); margin-top: 16px;
+  }
+
+  /* =====================
+     PORTFOLIO SECTION
+  ===================== */
+  .portfolio { padding: 120px 60px; background: var(--cream); }
+  .portfolio-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 60px; flex-wrap: wrap; gap: 24px;
+  }
+  .portfolio-filter {
+    display: flex; gap: 0; list-style: none;
+  }
+  .filter-btn {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    padding: 10px 20px; border: 1px solid var(--brown-pale);
+    background: none; cursor: none; font-family: 'Josefin Sans', sans-serif;
+    color: var(--text-light); transition: all 0.3s; font-weight: 300;
+    margin-left: -1px;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--brown-dark); color: var(--cream);
+    border-color: var(--brown-dark); z-index: 1;
+  }
+  .masonry-grid { columns: 3; column-gap: 16px; }
+  .masonry-item {
+    break-inside: avoid; margin-bottom: 16px;
+    position: relative; overflow: hidden; cursor: none;
+  }
+  .masonry-photo {
+    width: 100%; display: block;
+    transition: transform 0.6s ease;
+    background-size: cover; background-position: center;
+  }
+  .masonry-item:hover .masonry-photo { transform: scale(1.03); }
+  .masonry-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(44,24,16,0.85) 0%, transparent 55%);
+    opacity: 0; transition: opacity 0.4s;
+    display: flex; align-items: flex-end; padding: 24px;
+  }
+  .masonry-item:hover .masonry-overlay { opacity: 1; }
+  .masonry-cat {
+    font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 4px;
+  }
+  .masonry-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300; color: var(--cream);
+  }
+
+  /* =====================
+     SERVICES SECTION
+  ===================== */
+  .services { padding: 120px 60px; background: var(--brown-dark); }
+  .services-header { text-align: center; margin-bottom: 80px; }
+  .services-eyebrow {
+    font-size: 9px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px; font-weight: 300;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .services-eyebrow::before, .services-eyebrow::after {
+    content: ''; display: inline-block; width: 40px; height: 1px; background: var(--gold);
+  }
+  .services-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 64px); font-weight: 300; color: var(--cream);
+  }
+  .services-title em { font-style: italic; color: var(--gold-light); }
+  .services-subtitle {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--brown-pale); margin-top: 12px; font-weight: 300;
+  }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .service-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 52px 40px;
+    transition: all 0.4s; position: relative; overflow: hidden; cursor: none;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold); transform: scaleX(0);
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover { background: rgba(255,255,255,0.08); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 60px; font-weight: 300;
+    color: rgba(255,255,255,0.06); line-height: 1; margin-bottom: 24px;
+  }
+  .service-icon { font-size: 22px; color: var(--gold); margin-bottom: 20px; }
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 300; color: var(--cream); margin-bottom: 16px;
+  }
+  .service-desc {
+    font-size: 10px; letter-spacing: 1.5px; line-height: 2.2;
+    color: var(--brown-pale); font-weight: 300;
+  }
+  .service-price {
+    margin-top: 32px; padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--gold);
+  }
+  .service-price span {
+    font-size: 11px; color: var(--brown-pale);
+    font-family: 'Josefin Sans', sans-serif; font-weight: 300; letter-spacing: 2px;
+  }
+
+  /* =====================
+     TESTIMONIALS
+  ===================== */
+  .testimonials { padding: 120px 60px; background: var(--warm-white); }
+  .testimonials-header { text-align: center; margin-bottom: 80px; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .testimonial-card {
+    background: var(--cream); padding: 40px;
+    border-top: 2px solid var(--gold);
+  }
+  .quote-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px; line-height: 0.6;
+    color: var(--brown-pale); margin-bottom: 20px; display: block;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic; font-weight: 300;
+    line-height: 1.8; color: var(--text-mid); margin-bottom: 28px;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 12px; }
+  .author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; color: var(--cream); font-weight: 300; flex-shrink: 0;
+  }
+  .av1 { background: var(--brown-mid); }
+  .av2 { background: var(--gold); }
+  .av3 { background: var(--brown-dark); }
+  .author-name {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--brown-dark); font-weight: 300;
+  }
+  .author-role {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-light); font-weight: 300;
+  }
+
+  /* =====================
+     CONTACT SECTION
+  ===================== */
+  .contact { display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh; }
+  .contact-left {
+    background: var(--brown-dark); padding: 100px 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 68px); font-weight: 300;
+    color: var(--cream); line-height: 1.1; margin-bottom: 40px;
+  }
+  .contact-title em { font-style: italic; color: var(--gold-light); }
+  .contact-detail {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+  }
+  .contact-icon {
+    width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--gold); flex-shrink: 0;
+  }
+  .contact-label {
+    font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--brown-light); font-weight: 300; margin-bottom: 2px;
+  }
+  .contact-val {
+    font-size: 11px; letter-spacing: 1px; color: var(--brown-pale); font-weight: 300;
+  }
+  .contact-right {
+    background: var(--cream); padding: 100px 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .form-group { margin-bottom: 28px; }
+  .form-label {
+    display: block; font-size: 8px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 8px; font-weight: 300;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; background: none;
+    border: none; border-bottom: 1px solid var(--brown-pale);
+    padding: 12px 0; font-family: 'Josefin Sans', sans-serif;
+    font-size: 13px; letter-spacing: 1px; color: var(--text-dark);
+    outline: none; transition: border-color 0.3s; font-weight: 300;
+    appearance: none; -webkit-appearance: none;
+  }
+  .form-input::placeholder { color: var(--brown-pale); }
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--gold);
+  }
+  .form-textarea { resize: none; height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .submit-btn {
+    width: 100%; padding: 18px;
+    background: var(--brown-dark); color: var(--cream);
+    border: none; font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    cursor: none; transition: background 0.3s; font-weight: 300;
+    margin-top: 8px;
+  }
+  .submit-btn:hover { background: var(--gold); }
+
+  /* =====================
+     FOOTER
+  ===================== */
+  footer {
+    background: var(--brown-dark);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 40px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300; color: var(--cream);
+    letter-spacing: 4px; text-transform: uppercase;
+  }
+  .footer-logo span { font-style: italic; color: var(--gold); }
+  .footer-copy {
+    font-size: 9px; letter-spacing: 2px;
+    color: var(--brown-pale); font-weight: 300;
+  }
+  .social-links { display: flex; gap: 24px; }
+  .social-link {
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--brown-pale); text-decoration: none;
+    transition: color 0.3s; font-weight: 300;
+  }
+  .social-link:hover { color: var(--gold); }
+
+  /* =====================
+     SCROLL ANIMATIONS
+  ===================== */
+  .fade-up {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* =====================
+     MOBILE RESPONSIVE
+  ===================== */
+  @media (max-width: 900px) {
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { min-height: 70vh; padding: 120px 24px 60px; }
+    .hero-right { height: 50vh; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat-item { padding: 24px; }
+    .about { grid-template-columns: 1fr; }
+    .about-content { padding: 60px 24px; }
+    .about-badge { right: 20px; }
+    .portfolio { padding: 80px 24px; }
+    .masonry-grid { columns: 2; }
+    .services { padding: 80px 24px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .testimonials { padding: 80px 24px; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .contact { grid-template-columns: 1fr; }
+    .contact-left, .contact-right { padding: 60px 24px; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    footer { flex-direction: column; text-align: center; padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor (hidden on mobile) -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ========================
+     NAVIGATION BAR
+========================= -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Skeedor<span>Photos</span></a>
+  <ul class="nav-links">
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Book Now</a></li>
+  </ul>
+</nav>
+
+<!-- ========================
+     HERO SECTION
+========================= -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Bauchi · Nationwide</p>
+
+    <h1 class="hero-title">
+      Every frame<br>tells a <em>story.</em>
+    </h1>
+
+    <p class="hero-desc">
+      Timeless photography that captures warmth, depth, and beauty in life's most precious moments — with intention.
+    </p>
+
+    <a href="#portfolio" class="btn-primary">
+      <span>View Portfolio</span>
+      <span class="btn-arrow">→</span>
+    </a>
+
+    <div class="scroll-indicator">
+      <span class="scroll-text">Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-grid">
+      <!-- 
+        HOW TO ADD YOUR PHOTOS:
+        Replace the div below with an img tag like this:
+        <img src="your-photo-1.jpg" style="width:100%; height:100%; object-fit:cover;">
+        
+        Or change the class "photo-a" styles in the CSS above to:
+        background-image: url('your-photo-1.jpg');
+        background-size: cover;
+        background-position: center;
+      -->
+      <div class="img-cell">
+       <img src="photo1.jpg" style="width:100%; height:100%; object-fit:cover;">
+        <span class="photo-label"></span>
+      </div>
+      <div class="img-cell">
+        <img src="IMG_2185.jpg" style="width:100%; height:100%; object-fit:cover;">        
+        <span class="photo-label"></span>
+      </div>
+      <div class="img-cell">
+        <img src="photo3.jpg" style="width:100%; height:100%; object-fit:cover;">
+        <span class="photo-label"></span>
+      </div>
+      <div class="img-cell">
+        <img src="IMG_2297.jpg" style="width:100%; height:100%; object-fit:cover;"  >
+        <span class="photo-label"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================
+     STATS BAR
+========================= -->
+<div class="stats-bar">
+  <!-- EDIT: Change the numbers to match your client's real stats -->
+  <div class="stat-item fade-up">
+    <div class="stat-num">4<sup>+</sup></div>
+    <div class="stat-label">Years of Experience</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">100<sup>+</sup></div>
+    <div class="stat-label">Sessions Completed</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">98<sup>%</sup></div>
+    <div class="stat-label">Client Satisfaction</div>
+  </div>
+  <div class="stat-item fade-up">
+    <div class="stat-num">12<sup>+</sup></div>
+    <div class="stat-label">Awards Won</div>
+  </div>
+</div>
+
+<!-- ========================
+     ABOUT SECTION
+========================= -->
+<section class="about" id="about">
+  <div class="about-img">
+    <!-- EDIT: Replace this div background with your photographer's photo -->
+    <div class="about-photo"></div>
+    <div class="about-badge">
+      <!-- EDIT: Change the year to when Skeedor Photos was founded -->
+      <span class="about-badge-year">2023</span>
+      <span class="about-badge-text">Est.</span>
+    </div>
+  </div>
+
+  <div class="about-content">
+    <p class="section-eyebrow fade-up">About Skeedor</p>
+
+    <h2 class="section-title fade-up">
+      Crafting <em>memories</em><br>with intention
+    </h2>
+
+    <!-- EDIT: Change this text to your client's real story -->
+    <p class="about-text fade-up">
+  Skeedor Photos is Bauchi's premier wedding photographer, built on one 
+  belief — that your wedding day deserves to be remembered exactly as it felt. 
+  Warm, cinematic, and deeply personal. Every frame is crafted to last a lifetime.
+</p>
+<p class="about-text fade-up">
+  With years of experience documenting love stories across Nigeria and beyond, 
+  Skeedor brings a calm, unobtrusive presence to every celebration — so you 
+  stay in the moment while we capture it. From intimate weddings to 
+  grand traditional ceremonies, no love story is too big or too small.
+</p>
+    <div class="signature fade-up">Skeedor Photos</div>
+  </div>
+</section>
+
+<!-- ========================
+     PORTFOLIO SECTION
+========================= -->
+<section class="portfolio" id="portfolio">
+  <div class="portfolio-header">
+    <div>
+      <p class="section-eyebrow fade-up">Selected Work</p>
+      <h2 class="section-title fade-up" style="margin-bottom:0">
+        Our <em>Portfolio</em>
+      </h2>
+    </div>
+    <div class="portfolio-filter">
+      <button class="filter-btn" onclick="filterGallery('wedding', this)">Weddings</button>
+      <button class="filter-btn" onclick="filterGallery('portrait', this)">Portraits</button>
+      <button class="filter-btn" onclick="filterGallery('family session', this)">Family Sessions</button>
+    </div>
+  </div>
+
+  <div class="masonry-grid" id="gallery">
+    <!--
+      HOW TO ADD YOUR PORTFOLIO PHOTOS:
+      Each .masonry-item is one photo. To use a real image:
+      1. Put your image file in the same folder as this index.html
+      2. Change the div with class "photo-X" to an <img> tag like:
+         <img src="wedding1.jpg" class="masonry-photo" style="height:380px; object-fit:cover;">
+      
+      Change data-category to "wedding", "portrait", or "Family Sessions"
+      to make the filter buttons work.
+    -->
+
+    <div class="masonry-item fade-up" data-category="wedding">
+         <img src="snadi.jpg" class="masonry-photo" style="height:px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Wedding</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="portrait">
+         <img src="yasminportrait.jpg" class="masonry-photo" style="height:px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Portrait</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="family session">
+         <img src="bardefam.jpg" class="masonry-photo" style="height:px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Family Sessions</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="wedding">
+         <img src="hfportrait.jpg" class="masonry-photo" style="height:px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Wedding</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="portrait">
+         <img src="shatu.jpg" class="masonry-photo" style="height: px;px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Portrait</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="family session">
+         <img src="gwalabe.jpg" class="masonry-photo" style="height:px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Family Sessions</div>
+          <div class="masonry-name"> </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="wedding">
+         <img src="khamis.jpg" class="masonry-photo" style="height:px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Wedding</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="portrait">
+         <img src="comfort.jpg" class="masonry-photo" style="height:px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Portrait</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="masonry-item fade-up" data-category="family session">
+         <img src="maza.jpg" class="masonry-photo" style="height:380px; object-fit:cover;">
+      <div class="masonry-overlay">
+        <div>
+          <div class="masonry-cat">Family Sessions</div>
+          <div class="masonry-name"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================
+     SERVICES SECTION
+========================= -->
+<section class="services" id="services">
+  <div class="services-header fade-up">
+    <p class="services-eyebrow">What We Offer</p>
+    <h2 class="services-title">Crafted <em>Experiences</em></h2>
+    <p class="services-subtitle">Every package is a bespoke journey</p>
+  </div>
+
+  <!-- EDIT: Update service names, descriptions, and prices -->
+  <div class="services-grid">
+    <div class="service-card fade-up">
+      <div class="service-num">01</div>
+      <div class="service-icon">◎</div>
+      <div class="service-name">Package One</div>
+      <div class="service-desc">
+        <ul>
+          <li>4 hours of coverage</li>
+          <li>2 photographers </li>
+          <li>A photobook & digital images in a USB drive</li>
+          <li>12*12 enlargement frame</li>
+        </ul>
+      </div>
+      <div class="service-price">₦350,000 <span>/ session</span></div>
+    </div>
+
+    <div class="service-card fade-up">
+      <div class="service-num">02</div>
+      <div class="service-icon">◈</div>
+      <div class="service-name">Package Two</div>
+      <div class="service-desc">
+        <ul>
+          <li>2 hours of coverage</li>
+          <li>A USB drive with digital images</li>
+          <li>Google Drive link containing all images</li>
+          <li>1 photographer</li>
+        </ul>
+      </div>
+      <div class="service-price">₦200,000 <span>/ session</span></div>
+    </div>
+
+    <div class="service-card fade-up">
+      <div class="service-num">03</div>
+      <div class="service-icon">◇</div>
+      <div class="service-name">Pre-Wedding/Family Group Session</div>
+      <div class="service-desc">
+        <ul>
+          <li>1 hour of coverage</li>
+          <li>A USB drive with digital images</li>
+          <li>3 outfit changes</li>
+        </ul>
+      </div>
+      <div class="service-price">₦80,000 <span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================
+     TESTIMONIALS
+========================= -->
+<section class="testimonials">
+  <div class="testimonials-header">
+    <p class="section-eyebrow fade-up" style="justify-content:center">Client Love</p>
+    <h2 class="section-title fade-up" style="text-align:center">
+      What they <em>say</em>
+    </h2>
+  </div>
+
+  <!-- EDIT: Replace with your client's real testimonials -->
+  <div class="testimonials-grid">
+    <div class="testimonial-card fade-up">
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text">
+        The photos from our wedding were absolutely breathtaking. Every image told our story in a way we never imagined possible.
+      </p>
+      <div class="testimonial-author">
+        <div class="author-avatar av1">IH</div>
+        <div>
+          <div class="author-name">Ibrahim & Hafsat</div>
+          <div class="author-role">Wedding · Bauchi 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card fade-up">
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text">
+        We did a family shoot and the experience was seamless from start to finish. The photos came out absolutely beautiful. Our kids even had fun!      </p>
+      <div class="testimonial-author">
+        <div class="author-avatar av2">M</div>
+        <div>
+          <div class="author-name">Maikafi Family</div>
+          <div class="author-role">Family Session · Bauchi 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card fade-up">
+      <span class="quote-mark">"</span>
+      <p class="testimonial-text">
+        I was nervous in front of the camera but they made me feel so at ease. My portraits finally look like the real, confident me.
+      </p>
+      <div class="testimonial-author">
+        <div class="author-avatar av3">YA</div>
+        <div>
+          <div class="author-name">Yasmin Arzika</div>
+          <div class="author-role">Portrait · Kano 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================
+     CONTACT / BOOKING
+========================= -->
+<section class="contact" id="contact">
+  <div class="contact-left">
+    <p class="section-eyebrow" style="color:var(--gold)">Let's Create Together</p>
+    <h2 class="contact-title">
+      Book your<br><em>session</em><br>today.
+    </h2>
+    <div style="margin-top: 40px">
+      <!-- EDIT: Update with your client's real contact details -->
+      <div class="contact-detail">
+        <div class="contact-icon">✉</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val">sulaimanzirami@gmail.com</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">☏</div>
+        <div>
+          <div class="contact-label">Phone / WhatsApp</div>
+          <div class="contact-val">+234 701 247 7784</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">◎</div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-val">Bauchi · Nationwide</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">@</div>
+        <div>
+          <div class="contact-label">Instagram</div>
+          <div class="contact-val">@skeedor_photos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-right">
+    <p class="section-eyebrow fade-up">Enquire Now</p>
+    <!--
+      FORM SETUP:
+      To make this form actually send emails (for free), follow these steps:
+      1. Go to https://formspree.io and sign up (free)
+      2. Create a new form — you'll get a URL like https://formspree.io/f/XXXXXXXX
+      3. Change the action below from "#" to that URL
+      4. That's it! Form submissions will go to your client's email.
+    -->
+    <form action="#" method="POST" id="contactForm">
+      <div class="form-row fade-up">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" name="firstName" class="form-input" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" name="lastName" class="form-input" placeholder="Your surname" required>
+        </div>
+      </div>
+      <div class="form-group fade-up">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group fade-up">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" name="phone" class="form-input" placeholder="+234 ...">
+      </div>
+      <div class="form-group fade-up">
+        <label class="form-label">Type of Session</label>
+        <select name="service" class="form-select" required>
+          <option value="" disabled selected>Select a service</option>
+          <option value="wedding">Wedding Photography</option>
+          <option value="portrait">Portrait Session</option>
+          <option value="Family Sessions">Family Sessions</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group fade-up">
+        <label class="form-label">Your Message</label>
+        <textarea name="message" class="form-textarea" placeholder="Tell me about your vision, date, and location..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn fade-up">Send Enquiry →</button>
+      <div id="formSuccess" style="display:none; margin-top:16px; font-size:10px; letter-spacing:2px; color:var(--gold); text-align:center; text-transform:uppercase;">
+        Message sent! We'll be in touch soon.
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ========================
+     FOOTER
+========================= -->
+<footer>
+  <div class="footer-logo">Skeedor<span>Photos</span></div>
+  <div class="footer-copy">© 2026 Skeedor Photos. All Rights Reserved.</div>
+  <!-- EDIT: Replace # with real social media links -->
+  <div class="social-links">
+    <a href="https://instagram.com/skeedor_photos" class="social-link" target="_blank">Instagram</a>
+    <a href="https://tiktok.com/@skeedor_photos" class="social-link" target="_blank">TikTok</a>
+    <a href="https://wa.me/+2347012477784" class="social-link" target="_blank">WhatsApp</a>
+  </div>
+</footer>
+
+
+<!-- ========================
+     JAVASCRIPT
+========================= -->
+<script>
+  // --- Custom animated cursor ---
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', function(e) {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  (function animateCursor() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  })();
+
+  // --- Navbar changes colour when you scroll down ---
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 80) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // --- Fade-up animations on scroll ---
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry, i) {
+      if (entry.isIntersecting) {
+        setTimeout(function() {
+          entry.target.classList.add('visible');
+        }, i * 80);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  // --- Portfolio filter buttons ---
+  function filterGallery(category, btn) {
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    btn.classList.add('active');
+
+    // Show/hide items
+    document.querySelectorAll('.masonry-item').forEach(function(item) {
+      if (category === 'all' || item.dataset.category === category) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  // --- Contact form success message ---
+  const form = document.getElementById('contactForm');
+  form.addEventListener('submit', function(e) {
+    // Only show success if form action is set to Formspree
+    if (form.action === '#' || form.action === '') {
+      e.preventDefault();
+      document.getElementById('formSuccess').style.display = 'block';
+    }
+    // If Formspree action is set, it handles submission automatically
+  });
+</script>
+
+</body>
+</html>
